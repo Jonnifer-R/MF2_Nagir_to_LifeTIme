@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import Form from './Form';
+import InputForm from './InputForm';
 
 class App extends Component {
   render() {
     return (
       <div className="container">     
-        <Form name="peak" />
-        <Form name="retire" />
+        <InputForm name="peak" />
+        <InputForm name="retire" />
       </div>
     );
   }
