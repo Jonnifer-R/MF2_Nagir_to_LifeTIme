@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import InputForm from './InputForm';
+import Output from './Output';
 
 class App extends Component {
   state = {
@@ -50,18 +51,25 @@ class App extends Component {
   render() {
     return (
       <div className="container">
+
         <div className="inline-block">
-          ナギール数</div>
+          ナギール数
+        </div>
         <div className="inline-block">
-          <InputForm name="peak" change={this.setStateValue} /></div>
+          <InputForm name="peak" change={this.setStateValue} />
+        </div>
         <div className="inline-block">
-          <InputForm name="retire" change={this.setStateValue} /></div>
+          <InputForm name="retire" change={this.setStateValue} />
+        </div>
 
         <h1 align="center">⬇</h1>
 
-        
+        <div className="inline-block">
+          <Output peak={this.state.peak} retire={this.state.retire} />
+        </div>
+
       </div>
-    );
+    )
   }
 }
 
