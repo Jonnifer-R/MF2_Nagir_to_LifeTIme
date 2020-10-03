@@ -36,17 +36,18 @@ const NagirMenu = (props) => {
 class InputForm extends Component {
   state = {
     name: this.props.name,
-    value: 0,
   }
 
-  // handleChange = (event) => {
-  //   const {value} = event.target
-  //   const {name} = event.target.name
-  
-  //   this.setState({
-  //     [name]: value,
-  //   })
-  // }
+  handleChange = (event) => {
+    const name = this.state.name
+    const value = event.target.value
+
+    this.setState({
+      [name]: value,
+    })
+    
+    this.props.change(name,value)
+  }
 
   render(){
     const {name} = this.state;
@@ -56,7 +57,7 @@ class InputForm extends Component {
         <label htmlFor={name}>
           <ColtsMessage name={name} />
         </label>
-        <select id={name}>
+        <select id={name} onChange={this.handleChange}>
           <NagirMenu name={name} />
         </select>
       </form>
