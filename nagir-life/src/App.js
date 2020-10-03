@@ -7,22 +7,28 @@ class App extends Component {
     retire: 0,
   }
 
-  calcLifeTime = () => {
-
-  }
-
   setStateValue = (name, value) => {
-    if(name === "peak" && value === "x"){
+    if(name === "peak" && value.includes("x")){
       //ピーク告知なし
-      this.setState({
-        peak: "x"
-      })
+      switch(value){
+        case "x4":
+          this.setState({peak: "x4"})
+          break;
+        case "x5":
+          this.setState({peak: "x5"})
+          break;
+        case "x6":
+          this.setState({peak: "x6"})
+          break;
+        default:
+          console.log("Error: Bad x peak")
+      }
       return ;
     }
 
     let num = parseInt(value)
     if( !Number.isInteger(num) && (num < 0 || num > 48) ){
-      console.log("Error")
+      console.log("Error: Bad nagir number")
       return ;
     }
 
@@ -35,7 +41,7 @@ class App extends Component {
         retire: num
       })
     }else{
-      console.log("Error")
+      console.log("Error: Bad label name")
     }
     
     return ;

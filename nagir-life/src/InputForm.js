@@ -15,7 +15,11 @@ const NagirMenu = (props) => {
   const name = props.name
 
   const noneSelect = <option value='0' key='0'>―選択―</option>
-  const peakLess = <option value='x' key='x'>告知なし</option>
+  const peakLess = [
+    <option value='x4' key='x4'>無し 4</option>,
+    <option value='x5' key='x5'>無し 5</option>,
+    <option value='x6' key='x6'>無し 6</option>,
+  ]
   
   const maxNagirNum = 48
   const sequentiaNumMenu = new Array(maxNagirNum)
@@ -26,7 +30,7 @@ const NagirMenu = (props) => {
   )
 
   if(name === 'peak'){
-    nagirMenu.unshift(peakLess)
+    nagirMenu.unshift(...peakLess)
   }
   nagirMenu.unshift(noneSelect)
 
