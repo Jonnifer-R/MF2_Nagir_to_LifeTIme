@@ -651,8 +651,9 @@ td {
 
 th,
 td {
-  text-align: left;
-  padding: .5rem; }
+  text-align: left; 
+  padding-top: .5rem;
+}
 
 caption {
   padding: 1rem 0;
