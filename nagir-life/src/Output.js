@@ -32,7 +32,43 @@ const getPostPeakFromType = (type) => {
   }
 }
 
-const calcPeak = (type,nagir) => {
+const calcPeak = (nagir) => {
+  let range = {
+    a: {bottomRange: 0, topRange: 0},
+    b: {bottomRange: 0, topRange: 0},
+    c: {bottomRange: 0, topRange: 0},
+    d: {bottomRange: 0, topRange: 0},
+  }
+
+  if(isNaN(nagir)){
+    if(nagir==="x4"){
+      range.a.bottomRange = 211
+      range.a.topRange = 240
+    }else if(nagir==="x5"){
+      range.a.bottomRange = 281
+      range.a.topRange = 300
+    }else if(nagir==="x6"){
+      range.a.bottomRange = 351
+      range.a.topRange = 360
+    }else{
+      console.log("Error: Bad nagir num")
+      return ;
+    }
+    range.b = calcPeakEachType("持続",0)
+    range.c = calcPeakEachType("普通",0)
+    range.d = calcPeakEachType("晩成",0)
+
+  }else{
+    range.a = calcPeakEachType("早熟",nagir)
+    range.b = calcPeakEachType("持続",nagir)
+    range.c = calcPeakEachType("普通",nagir)
+    range.d = calcPeakEachType("晩成",nagir)
+  }
+
+  return range
+}
+
+const calcPeakEachType = (type,nagir) => {
   if(nagir===0){
     return 0;
   }
@@ -86,7 +122,6 @@ const TableList = (props) => {
   const name = props.name
   const type = props.type
 
-  console.log(type.bottomRange)
   return (
     <tr>
       <td>{name}</td>
@@ -99,10 +134,10 @@ const TableList = (props) => {
 
 const EstimateLife = (props) => {
   const type = {
-    a: calcRange(props.type.a, props.retire),
-    b: calcRange(props.type.b, props.retire),
-    c: calcRange(props.type.c, props.retire),
-    d: calcRange(props.type.d, props.retire),
+    a: calcRange(props.peak.a, props.retire),
+    b: calcRange(props.peak.b, props.retire),
+    c: calcRange(props.peak.c, props.retire),
+    d: calcRange(props.peak.d, props.retire),
   }
 
   return(
@@ -124,16 +159,11 @@ class Output extends Component {
     const peakNagir = this.props.peak
     const retireNagir = this.props.retire
 
-    const type = {
-      a: calcPeak("早熟",peakNagir),
-      b: calcPeak("持続",peakNagir),
-      c: calcPeak("普通",peakNagir),
-      d: calcPeak("晩成",peakNagir),
-    }
+    const peak = calcPeak(peakNagir)
     const retire = calcRetire(retireNagir)
 
     return (
-      <EstimateLife type={type} retire={retire} />
+      <EstimateLife peak={peak} retire={retire} />
     )
   }
 }
