@@ -97,6 +97,46 @@ const calcRetire = (nagir) => {
   return {bottomRange, topRange}
 }
 
+const calcPeakAfterPhase = (peak, peakAnd1, peakAnd2) => {
+  const nagir1 = [
+      {type: "早熟", bottom: 210, top: 262, phase: "phase5"},
+      {type: "早熟", bottom: 263, top: 280, phase: "postPeak"},
+      {type: "早熟", bottom: 281, top: 315, phase: "phase5"},
+      {type: "早熟", bottom: 316, top: 350, phase: "postPeak"},
+      {type: "早熟", bottom: 351, top: 367, phase: "phase5"},
+      {type: "早熟", bottom: 368, top: 480, phase: "postPeak"},
+
+      {type: "持続", bottom: 210, top: 262, phase: "postPeak"},
+      {type: "持続", bottom: 263, top: 280, phase: "peak"},
+      {type: "持続", bottom: 281, top: 315, phase: "postPeak"},
+      {type: "持続", bottom: 316, top: 350, phase: "peak"},
+      {type: "持続", bottom: 351, top: 367, phase: "postPeak"},
+      {type: "持続", bottom: 368, top: 480, phase: "peak"},
+  ]
+
+  const nagir2 = [
+      {type: "早熟", bottom: 481, top: 490, phase: "postPeak"},
+      {type: "早熟", bottom: 491, top: 525, phase: "phase5"},
+      {type: "早熟", bottom: 526, top: 560, phase: "postPeak"},
+      {type: "早熟", bottom: 561, top: 577, phase: "phase5"},
+      {type: "早熟", bottom: 578, top: 700, phase: "postPeak"},
+
+      {type: "持続", bottom: 481, top: 490, phase: "peak"},
+      {type: "持続", bottom: 491, top: 525, phase: "postPeak"},
+      {type: "持続", bottom: 526, top: 560, phase: "peak"},
+      {type: "持続", bottom: 561, top: 577, phase: "postPeak"},
+      {type: "持続", bottom: 578, top: 700, phase: "peak"},
+  ]
+
+  const result = nagir1
+    .filter(range => (
+      range.bottom <= peak.a.topRange &&
+      range.top >= peak.a.bottomRange &&
+      range.phase === peakAnd1
+    ))
+  // console.log("peak",peak)
+  console.log("result",result)
+}
 const calcRange = (rangeFromPeak,rangeFromRetire) =>{
   let bottomRange, topRange
   if(rangeFromPeak && rangeFromRetire){
@@ -168,14 +208,12 @@ const EstimateLife = (props) => {
 
 class Output extends Component {
   render() {
-    const peakNagir = this.props.peak
-    const retireNagir = this.props.retire
-
-    const peak = calcPeak(peakNagir)
-    const retire = calcRetire(retireNagir)
+    const peak = calcPeak(this.props.peak)
+    const retire = calcRetire(this.props.retire)
+    const peakAnd = calcPeakAfterPhase(peak, this.props.peakAnd1, this.props.peakAnd2)
 
     return (
-      <EstimateLife peak={peak} retire={retire} />
+      <EstimateLife peak={peak} retire={retire}/>
     )
   }
 }
