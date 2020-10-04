@@ -102,8 +102,14 @@ const calcRange = (rangeFromPeak,rangeFromRetire) =>{
   if(rangeFromPeak && rangeFromRetire){
     bottomRange = rangeFromPeak.bottomRange > rangeFromRetire.bottomRange ? 
       rangeFromPeak.bottomRange : rangeFromRetire.bottomRange
-    topRange = rangeFromPeak.TopRange > rangeFromRetire.topRange ?
+    topRange = rangeFromPeak.topRange < rangeFromRetire.topRange ?
       rangeFromPeak.topRange : rangeFromRetire.topRange
+
+    if(bottomRange > topRange || rangeFromPeak.topRange < rangeFromRetire.bottomRange){
+      //該当なし
+      return (0, 0)
+    }
+
   }else if(rangeFromPeak && (rangeFromRetire===0)){
     bottomRange = rangeFromPeak.bottomRange
     topRange = rangeFromPeak.topRange
@@ -111,8 +117,8 @@ const calcRange = (rangeFromPeak,rangeFromRetire) =>{
     bottomRange = rangeFromRetire.bottomRange
     topRange = rangeFromRetire.topRange
   }else{
-    bottomRange = "0"
-    topRange = "0"
+    bottomRange = 0
+    topRange = 0
   }
 
   return {bottomRange, topRange}
@@ -120,7 +126,7 @@ const calcRange = (rangeFromPeak,rangeFromRetire) =>{
 
 const TableList = (props) => {
   const name = props.name
-  const type = props.type
+  const type = props.type !== 0 ?  props.type : {bottomRange: 0, topRange: 0}
 
   return (
     <tr>
@@ -143,6 +149,12 @@ const EstimateLife = (props) => {
   return(
     <div className="result"> 
       <table>
+        <thead>
+          <tr>
+            <td> </td>
+            <td colSpan="3">寿命範囲</td>
+          </tr>
+        </thead>
         <tbody>
           <TableList name="早熟" type={type.a} />
           <TableList name="持続" type={type.b} />
