@@ -639,6 +639,10 @@ table {
   border-spacing: 0;
   width: 100%;
   max-width: 100%; }
+.result{
+  margin: auto;
+  width: 8rem;
+}
 
 thead th {
   border-bottom: 2px solid #dedede; }
@@ -651,8 +655,12 @@ td {
 
 th,
 td {
-  text-align: right; 
+  text-align: center; 
   padding-top: .5rem;
+}
+.life{
+  text-align: right; 
+  width: 2rem;
 }
 
 caption {

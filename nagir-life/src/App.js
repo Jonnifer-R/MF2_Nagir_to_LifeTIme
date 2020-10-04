@@ -64,7 +64,7 @@ class App extends Component {
 
         <h1 align="center">⬇</h1>
 
-        <div className="inline-block">
+        <div>
           <Output peak={this.state.peak} retire={this.state.retire} />
         </div>
 
