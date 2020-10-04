@@ -62,10 +62,22 @@ const calcRetire = (nagir) => {
 }
 
 const calcRange = (rangeFromPeak,rangeFromRetire) =>{
-  const bottomRange = rangeFromPeak.bottomRange > rangeFromRetire.bottomRange ? 
-    rangeFromPeak.bottomRange : rangeFromRetire.bottomRange
-  const topRange = rangeFromPeak.TopRange > rangeFromRetire.topRange ?
-    rangeFromPeak.topRange : rangeFromRetire.topRange
+  let bottomRange, topRange
+  if(rangeFromPeak && rangeFromRetire){
+    bottomRange = rangeFromPeak.bottomRange > rangeFromRetire.bottomRange ? 
+      rangeFromPeak.bottomRange : rangeFromRetire.bottomRange
+    topRange = rangeFromPeak.TopRange > rangeFromRetire.topRange ?
+      rangeFromPeak.topRange : rangeFromRetire.topRange
+  }else if(rangeFromPeak && (rangeFromRetire===0)){
+    bottomRange = rangeFromPeak.bottomRange
+    topRange = rangeFromPeak.topRange
+  }else if( (rangeFromPeak===0) && rangeFromRetire){
+    bottomRange = rangeFromRetire.bottomRange
+    topRange = rangeFromRetire.topRange
+  }else{
+    bottomRange = "0"
+    topRange = "0"
+  }
 
   return {bottomRange, topRange}
 }
@@ -74,12 +86,13 @@ const TableList = (props) => {
   const name = props.name
   const type = props.type
 
+  console.log(type.bottomRange)
   return (
     <tr>
       <td>{name}</td>
-      <td>{type.bottomRange}</td>
+      <td className="life">{type.bottomRange}</td>
       <td>-</td>
-      <td>{type.topRange}</td>
+      <td className="life">{type.topRange}</td>
     </tr>
   )
 }
@@ -93,7 +106,7 @@ const EstimateLife = (props) => {
   }
 
   return(
-    <div className="result">
+    <div className="result"> 
       <table>
         <tbody>
           <TableList name="早熟" type={type.a} />
