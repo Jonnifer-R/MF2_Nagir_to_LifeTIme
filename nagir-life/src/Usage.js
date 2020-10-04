@@ -5,7 +5,7 @@ class Usage extends Component {
     return (
       <div>
         <hr width="70%"/>
-        <h2>- 概要 -</h2>
+        <h2>- 概要と使い方 -</h2>
         <div className="usage-inline">
           <h5>1.目的</h5>
           <ul>ピーク告知と引退勧告1までに与えたナギールの数から<br />
