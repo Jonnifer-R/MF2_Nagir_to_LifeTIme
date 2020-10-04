@@ -13,19 +13,20 @@ class App extends Component {
 
   setStateValue = (name, value) => {
     if(name === "peakAnd1" || name === "peakAnd2"){
-      if(parseInt(value) === 0){
-        this.setState({
-          [name]: 0
-        })
-
-        return ;
-      }
       if(value === "phase5" || value === "peak" || value === "postPeak" ){
         this.setState({
           [name]: value
         })
 
         return ;
+
+      }else if(parseInt(value) === 0){
+        this.setState({
+          [name]: 0
+        })
+
+        return ;
+
       }else{
         console.log("Error: Bad peakAndNum value")
 
