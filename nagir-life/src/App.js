@@ -51,6 +51,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
+        <h1>ナギール数 to 寿命タイプ</h1>
 
         <div className="inline-block">
           ナギール数
