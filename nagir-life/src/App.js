@@ -7,9 +7,32 @@ class App extends Component {
   state = {
     peak: 0,
     retire: 0,
+    peakAnd1: 0,
+    peakAnd2: 0,
   }
 
   setStateValue = (name, value) => {
+    if(name === "peakAnd1" || name === "peakAnd2"){
+      if(parseInt(value) === 0){
+        this.setState({
+          [name]: 0
+        })
+
+        return ;
+      }
+      if(value === "phase5" || value === "peak" || value === "postPeak" ){
+        this.setState({
+          [name]: value
+        })
+
+        return ;
+      }else{
+        console.log("Error: Bad peakAndNum value")
+
+        return ;
+      }
+    }
+
     if(name === "peak" && value.includes("x")){
       //ピーク告知なし
       switch(value){
@@ -34,13 +57,9 @@ class App extends Component {
       return ;
     }
 
-    if(name === "peak"){
+    if(name === "peak" || name === "retire"){
       this.setState({
-        peak: num
-      })
-    }else if(name ==="retire"){
-      this.setState({
-        retire: num
+        [name]: num
       })
     }else{
       console.log("Error: Bad label name")
@@ -64,9 +83,22 @@ class App extends Component {
           <InputForm name="retire" change={this.setStateValue} />
         </div>
 
+        <p />
+
+        <div className="inline-block">
+          ピーク告知後
+        </div>
+        <div className="inline-block">
+          <InputForm name="peakAnd1" change={this.setStateValue} />
+        </div>
+        <div className="inline-block">
+          <InputForm name="peakAnd2" change={this.setStateValue} />
+        </div>
+
         <h1 align="center">⬇</h1>
         
-        <Output peak={this.state.peak} retire={this.state.retire} />
+        <Output peak={this.state.peak} retire={this.state.retire} 
+          peakAnd1={this.state.peakAnd1} peakAnd2={this.state.peakAnd2} />
 
         <Usage />
       </div>

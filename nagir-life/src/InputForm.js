@@ -1,19 +1,22 @@
 import React, {Component} from "react";
 
-const ColtsMessage = (props) => {
+const BoxTitle = (props) => {
   const name = props.name
-  if(name === "peak"){
-    return "ピーク告知"
-  }else if(name === "retire"){
-    return "引退勧告1"
-  }else{
-    return "未定義"
+  switch(name){
+    case "peak":
+      return "ピーク告知"
+    case "retire":
+      return "引退勧告1"
+    case "peakAnd1":
+      return "+1ナギール"
+    case "peakAnd2":
+      return "+2ナギール"
+    default:
+      return "未定義";
   }
 }
 
-const NagirMenu = (props) => {
-  const name = props.name
-
+const NagirMenu = (name) => {
   const noneSelect = <option value='0' key='0'>―選択―</option>
   const peakLess = [
     <option value='x4' key='x4'>無し 4</option>,
@@ -35,6 +38,21 @@ const NagirMenu = (props) => {
   nagirMenu.unshift(noneSelect)
 
   return nagirMenu
+}
+
+const BoxMenu = (props) => {
+  const name = props.name
+
+  if(name==="peak" || name==="retire"){
+    return NagirMenu(name)
+  }
+  
+  let menu = [<option value='0' key='0'>―選択―</option>]
+  menu.push(<option value='phase5' key='phase5'>5段階</option>)
+  menu.push(<option value='peak' key='peak'>ピーク</option>)
+  menu.push(<option value='postPeak' key='postPeak'>準ピーク</option>)
+
+  return menu
 }
 
 class InputForm extends Component {
@@ -59,10 +77,10 @@ class InputForm extends Component {
     return(
       <form>
         <label htmlFor={name}>
-          <ColtsMessage name={name} />
+          <BoxTitle name={name} />
         </label>
         <select id={name} onChange={this.handleChange}>
-          <NagirMenu name={name} />
+          <BoxMenu name={name} />
         </select>
       </form>
     )
