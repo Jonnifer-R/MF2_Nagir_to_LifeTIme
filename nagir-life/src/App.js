@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import InputForm from './InputForm';
 import Output from './Output';
+import Usage from './Usage';
 
 class App extends Component {
   state = {
@@ -64,11 +65,10 @@ class App extends Component {
         </div>
 
         <h1 align="center">⬇</h1>
+        
+        <Output peak={this.state.peak} retire={this.state.retire} />
 
-        <div>
-          <Output peak={this.state.peak} retire={this.state.retire} />
-        </div>
-
+        <Usage />
       </div>
     )
   }

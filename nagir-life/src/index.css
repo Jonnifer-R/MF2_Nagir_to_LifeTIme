@@ -637,6 +637,7 @@ textarea.has-error:active {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  margin-bottom: 4rem;
   width: 100%;
   max-width: 100%; }
 .result{
@@ -682,3 +683,8 @@ caption {
   =============== */
 /* Layout
   =============== */
+.usage-inline {
+  display: inline-block;
+  width:60% ;
+  text-align: left;
+}
