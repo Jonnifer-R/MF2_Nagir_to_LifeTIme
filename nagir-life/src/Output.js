@@ -54,9 +54,9 @@ const calcPeak = (nagir) => {
       console.log("Error: Bad nagir num")
       return ;
     }
-    range.b = calcPeakEachType("持続",0)
-    range.c = calcPeakEachType("普通",0)
-    range.d = calcPeakEachType("晩成",0)
+    range.b = {bottomRange: -1, topRange: -1}
+    range.c = {bottomRange: -1, topRange: -1}
+    range.d = {bottomRange: -1, topRange: -1}
 
   }else{
     range.a = calcPeakEachType("早熟",nagir)
@@ -70,7 +70,7 @@ const calcPeak = (nagir) => {
 
 const calcPeakEachType = (type,nagir) => {
   if(nagir===0){
-    return 0;
+    return {bottomRange: 0, topRange: 0};
   }
 
   const startPostPeak = parseInt(
@@ -88,7 +88,7 @@ const calcPeakEachType = (type,nagir) => {
 
 const calcRetire = (nagir) => {
   if(nagir===0){
-    return 0;
+    return {bottomRange: 0, topRange: 0};
   }
 
   const bottomRange = nagir*21+1
@@ -99,66 +99,99 @@ const calcRetire = (nagir) => {
 
 const calcPeakAfterPhase = (peak, peakAnd1, peakAnd2) => {
   const nagir1 = [
-      {type: "早熟", bottom: 210, top: 262, phase: "phase5"},
-      {type: "早熟", bottom: 263, top: 280, phase: "postPeak"},
-      {type: "早熟", bottom: 281, top: 315, phase: "phase5"},
-      {type: "早熟", bottom: 316, top: 350, phase: "postPeak"},
-      {type: "早熟", bottom: 351, top: 367, phase: "phase5"},
-      {type: "早熟", bottom: 368, top: 480, phase: "postPeak"},
+      {type: "早熟", bottomRange: 241, topRange: 262, phase: "phase5"},
+      {type: "早熟", bottomRange: 263, topRange: 280, phase: "postPeak"},
+      {type: "早熟", bottomRange: 281, topRange: 315, phase: "phase5"},
+      {type: "早熟", bottomRange: 316, topRange: 350, phase: "postPeak"},
+      {type: "早熟", bottomRange: 351, topRange: 367, phase: "phase5"},
+      {type: "早熟", bottomRange: 368, topRange: 480, phase: "postPeak"},
+      {type: "早熟", bottomRange: 481, topRange: 700, phase: "peak"},
 
-      {type: "持続", bottom: 210, top: 262, phase: "postPeak"},
-      {type: "持続", bottom: 263, top: 280, phase: "peak"},
-      {type: "持続", bottom: 281, top: 315, phase: "postPeak"},
-      {type: "持続", bottom: 316, top: 350, phase: "peak"},
-      {type: "持続", bottom: 351, top: 367, phase: "postPeak"},
-      {type: "持続", bottom: 368, top: 480, phase: "peak"},
+      {type: "持続", bottomRange: 241, topRange: 262, phase: "postPeak"},
+      {type: "持続", bottomRange: 263, topRange: 280, phase: "peak"},
+      {type: "持続", bottomRange: 281, topRange: 315, phase: "postPeak"},
+      {type: "持続", bottomRange: 316, topRange: 350, phase: "peak"},
+      {type: "持続", bottomRange: 351, topRange: 367, phase: "postPeak"},
+      {type: "持続", bottomRange: 368, topRange: 700, phase: "peak"},
   ]
 
   const nagir2 = [
-      {type: "早熟", bottom: 481, top: 490, phase: "postPeak"},
-      {type: "早熟", bottom: 491, top: 525, phase: "phase5"},
-      {type: "早熟", bottom: 526, top: 560, phase: "postPeak"},
-      {type: "早熟", bottom: 561, top: 577, phase: "phase5"},
-      {type: "早熟", bottom: 578, top: 700, phase: "postPeak"},
+      {type: "早熟", bottomRange: 421, topRange: 472, phase: "phase5"},
+      {type: "早熟", bottomRange: 473, topRange: 490, phase: "postPeak"},
+      {type: "早熟", bottomRange: 491, topRange: 525, phase: "phase5"},
+      {type: "早熟", bottomRange: 526, topRange: 560, phase: "postPeak"},
+      {type: "早熟", bottomRange: 561, topRange: 577, phase: "phase5"},
+      {type: "早熟", bottomRange: 578, topRange: 700, phase: "postPeak"},
 
-      {type: "持続", bottom: 481, top: 490, phase: "peak"},
-      {type: "持続", bottom: 491, top: 525, phase: "postPeak"},
-      {type: "持続", bottom: 526, top: 560, phase: "peak"},
-      {type: "持続", bottom: 561, top: 577, phase: "postPeak"},
-      {type: "持続", bottom: 578, top: 700, phase: "peak"},
+      {type: "持続", bottomRange: 421, topRange: 472, phase: "postPeak"},
+      {type: "持続", bottomRange: 473, topRange: 490, phase: "peak"},
+      {type: "持続", bottomRange: 491, topRange: 525, phase: "postPeak"},
+      {type: "持続", bottomRange: 526, topRange: 560, phase: "peak"},
+      {type: "持続", bottomRange: 561, topRange: 577, phase: "postPeak"},
+      {type: "持続", bottomRange: 578, topRange: 700, phase: "peak"},
   ]
 
-  const result = nagir1
-    .filter(range => (
-      range.bottom <= peak.a.topRange &&
-      range.top >= peak.a.bottomRange &&
+  let result = {
+    nagir1: nagir1.filter(range => (
+      range.bottomRange <= peak.a.topRange &&
+      range.topRange >= peak.a.bottomRange &&
       range.phase === peakAnd1
-    ))
-  // console.log("peak",peak)
-  console.log("result",result)
+    )),
+    nagir2: nagir2.filter(range => (
+      range.bottomRange <= peak.a.topRange &&
+      range.topRange >= peak.a.bottomRange &&
+      range.phase === peakAnd2
+    )),
+  }
+
+  return result
 }
-const calcRange = (rangeFromPeak,rangeFromRetire) =>{
-  let bottomRange, topRange
-  if(rangeFromPeak && rangeFromRetire){
-    bottomRange = rangeFromPeak.bottomRange > rangeFromRetire.bottomRange ? 
-      rangeFromPeak.bottomRange : rangeFromRetire.bottomRange
-    topRange = rangeFromPeak.topRange < rangeFromRetire.topRange ?
-      rangeFromPeak.topRange : rangeFromRetire.topRange
 
-    if(bottomRange > topRange || rangeFromPeak.topRange < rangeFromRetire.bottomRange){
-      //該当なし
-      return (0, 0)
-    }
-
-  }else if(rangeFromPeak && (rangeFromRetire===0)){
-    bottomRange = rangeFromPeak.bottomRange
-    topRange = rangeFromPeak.topRange
-  }else if( (rangeFromPeak===0) && rangeFromRetire){
-    bottomRange = rangeFromRetire.bottomRange
-    topRange = rangeFromRetire.topRange
+const isExistRange = (range) => {
+  if(range.bottomRange === -1 && range.topRange === -1){
+    return false
+  }else if(range.bottomRange === 0 && range.topRange === 0){
+    return false
   }else{
-    bottomRange = 0
-    topRange = 0
+    return true
+  }
+}
+
+const isZeroRange = (range) => {
+  if(range.bottomRange === 0 && range.topRange === 0){
+    return true
+  }else{
+    return false
+  }
+}
+
+const calcRange = (rangeA, rangeB) => {
+  //共通範囲を得る
+  let bottomRange, topRange
+
+  if( isExistRange(rangeA) && isExistRange(rangeB)){
+    if(rangeA.bottomRange > rangeB.topRange || rangeA.topRange < rangeB.bottomRange){
+      //範囲なし
+      return {bottomRange: -1, topRange: -1}
+    }
+  }
+
+  if( isExistRange(rangeA) && isExistRange(rangeB) ){
+    bottomRange = rangeA.bottomRange > rangeB.bottomRange ?
+      rangeA.bottomRange : rangeB.bottomRange
+    topRange = rangeA.topRange < rangeB.topRange ?
+      rangeA.topRange : rangeB.topRange
+
+  }else if( isZeroRange(rangeA) ){
+    bottomRange = rangeB.bottomRange
+    topRange = rangeB.topRange
+
+  }else if( isZeroRange(rangeB) ){
+    bottomRange = rangeA.bottomRange
+    topRange = rangeA.topRange
+  }else{
+    bottomRange = -1
+    topRange = -1
   }
 
   return {bottomRange, topRange}
@@ -178,12 +211,87 @@ const TableList = (props) => {
   )
 }
 
+const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
+  const resultRange = range
+
+  if( (phase.nagir1 !== 0 && rangePeakAnd.nagir1.length === 0) ||
+    (phase.nagir2 !== 0 && rangePeakAnd.nagir2.length === 0) ){
+    //入力がリスト範囲にない
+    resultRange.a = {bottomRange: -1, topRange: -1}
+    resultRange.b = {bottomRange: -1, topRange: -1}
+  }
+  
+  if(rangePeakAnd.nagir1.length !== 0){
+    const rangeNagir1A = rangePeakAnd.nagir1.filter(list => (list.type === "早熟"))
+    if(rangeNagir1A.length === 0){
+      resultRange.a = {bottomRange: -1, topRange: -1}
+    }
+    for( const range1 of rangeNagir1A ){
+      resultRange.a = calcRange(resultRange.a, range1)
+    }
+
+    const rangeNagir1B = rangePeakAnd.nagir1.filter(list => (list.type === "持続"))
+    if(rangeNagir1B.length === 0){
+      resultRange.b = {bottomRange: -1, topRange: -1}
+    }
+    for( const range1 of rangeNagir1B ){
+      resultRange.b = calcRange(resultRange.b, range1)
+    }    
+  }
+
+  if(rangePeakAnd.nagir2.length !== 0){
+    const rangeNagir2A = rangePeakAnd.nagir2.filter(list => (list.type === "早熟"))
+    if(rangeNagir2A.length === 0){
+      resultRange.a = {bottomRange: -1, topRange: -1}
+    }
+    for( const range2 of rangeNagir2A ){
+      resultRange.a = calcRange(resultRange.a, range2)
+    }
+
+    const rangeNagir2B = rangePeakAnd.nagir2.filter(list => (list.type === "持続"))
+    if(rangeNagir2B.length === 0){
+      resultRange.b = {bottomRange: -1, topRange: -1}
+    }
+    for( const range2 of rangeNagir2B ){
+      resultRange.b = calcRange(resultRange.b, range2)
+    }
+  }
+
+  //ナギール追加で早熟はピークにならない。持続は5段階にならない。{
+  if(phase.nagir1 === "phase5"){
+    resultRange.b = {bottomRange: -1, topRange: -1}
+
+    if(range.a.bottomRange > 368){
+      //360週から早熟も5段階にならない
+      resultRange.a = {bottomRange: -1, topRange: -1}
+    }
+  }
+  if(phase.nagir1 === "peak"){
+    if(range.a.topRange > 480){
+      //481週から早熟もピークになる
+      resultRange.a.bottomRange = range.a.bottomRange < 480 ? 481 : range.a.bottomRange
+    }else{
+      resultRange.a = {bottomRange: -1, topRange: -1}
+    }
+  }
+
+  if(phase.nagir2 === "phase5"){
+    resultRange.b = {bottomRange: -1, topRange: -1}
+  }
+  if(phase.nagir2 === "peak"){
+    resultRange.a = {bottomRange: -1, topRange: -1}
+  }
+    
+
+  return resultRange
+}
+
 const EstimateLife = (props) => {
   const type = {
-    a: calcRange(props.peak.a, props.retire),
-    b: calcRange(props.peak.b, props.retire),
-    c: calcRange(props.peak.c, props.retire),
-    d: calcRange(props.peak.d, props.retire),
+    a: {bottomRange: props.range.a.bottomRange, topRange: props.range.a.topRange},
+    b: {bottomRange: props.range.b.bottomRange, topRange: props.range.b.topRange},
+    c: {bottomRange: props.range.c.bottomRange, topRange: props.range.c.topRange},
+    d: {bottomRange: props.range.d.bottomRange, topRange: props.range.d.topRange},
   }
 
   return(
@@ -208,12 +316,23 @@ const EstimateLife = (props) => {
 
 class Output extends Component {
   render() {
-    const peak = calcPeak(this.props.peak)
-    const retire = calcRetire(this.props.retire)
-    const peakAnd = calcPeakAfterPhase(peak, this.props.peakAnd1, this.props.peakAnd2)
+    const rangePeak = calcPeak(this.props.peak)
+    const rangeRetire = calcRetire(this.props.retire)
+    const rangePeakAnd = calcPeakAfterPhase(rangePeak, this.props.peakAnd1, this.props.peakAnd2)
+    const phase = {nagir1: this.props.peakAnd1, nagir2: this.props.peakAnd2}
 
-    return (
-      <EstimateLife peak={peak} retire={retire}/>
+    let range = {
+      //a.早熟 b.持続 c.普通 d.晩成
+      a: calcRange(rangePeak.a, rangeRetire),
+      b: calcRange(rangePeak.b, rangeRetire),
+      c: calcRange(rangePeak.c, rangeRetire),
+      d: calcRange(rangePeak.d, rangeRetire),
+    }
+
+    range = calcYoungTypeAndJudge(range,rangePeakAnd,phase)
+
+    return (      
+      <EstimateLife range={range}/>
     )
   }
 }
