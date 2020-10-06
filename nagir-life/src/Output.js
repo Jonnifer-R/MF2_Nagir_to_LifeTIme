@@ -316,7 +316,7 @@ const TableList = (props) => {
 
   return (
     <tr>
-      <td>{name}</td>
+      <td className="head">{name}</td>
       <td className="life">{type.bottomRange}</td>
       <td>-</td>
       <td className="life">{type.topRange}</td>
