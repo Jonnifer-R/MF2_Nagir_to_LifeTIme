@@ -268,6 +268,44 @@ const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
   return resultRange
 }
 
+const ProcessDataView = (props) => {
+  const rangePeak = props.rangePeak
+  const rangeRetire = props.rangeRetire
+  const rangePeakAnd = props.rangePeakAnd
+  const phase = props.phase
+  const rangeNagir1 = {
+    a: {bottomRange: 0, topRange: 0},
+    b: {bottomRange: 0, topRange: 0},
+    c: {bottomRange: 0, topRange: 0},
+    d: {bottomRange: 0, topRange: 0},
+  }
+  const rangeNagir2 = {
+    a: {bottomRange: 0, topRange: 0},
+    b: {bottomRange: 0, topRange: 0},
+    c: {bottomRange: 0, topRange: 0},
+    d: {bottomRange: 0, topRange: 0},
+  }
+
+  if( phase.nagir1 ){
+    rangeNagir1.a = calcRangeUseFilterFromPhase(rangePeak.a, rangePeakAnd.nagir1, "早熟")
+    rangeNagir1.b = calcRangeUseFilterFromPhase(rangePeak.b, rangePeakAnd.nagir1, "持続")
+  }
+
+  if( phase.nagir2 ){
+    rangeNagir2.a = calcRangeUseFilterFromPhase(rangePeak.a, rangePeakAnd.nagir2, "早熟")
+    rangeNagir2.b = calcRangeUseFilterFromPhase(rangePeak.b, rangePeakAnd.nagir2, "持続")
+  }
+
+  return(
+    <div>
+      <EstimateLife title="ピーク告知" range={rangePeak} />
+      <EstimateLife title="引退勧告1" range={rangeRetire} />
+      <EstimateLife title="+1ナギール" range={rangeNagir1} />
+      <EstimateLife title="+2ナギール" range={rangeNagir2} />
+    </div>
+  )
+}
+
 const TableList = (props) => {
   const name = props.name
   const type = props.type !== 0 ?  props.type : {bottomRange: 0, topRange: 0}
@@ -282,17 +320,9 @@ const TableList = (props) => {
   )
 }
 
-const ProcessDataView = (props) => {
-  return(
-    <div className="inline-block">
-      <table>
-        <thead></thead>
-      </table>
-    </div>
-  )
-}
-
 const EstimateLife = (props) => {
+  const title = props.title
+  const subText = title ? "" : "寿命範囲"
   const type = {
     a: {bottomRange: props.range.a.bottomRange, topRange: props.range.a.topRange},
     b: {bottomRange: props.range.b.bottomRange, topRange: props.range.b.topRange},
@@ -302,11 +332,12 @@ const EstimateLife = (props) => {
 
   return(
     <div className="result"> 
+      <u>{title}</u>
       <table>
         <thead>
           <tr>
             <td> </td>
-            <td colSpan="3">寿命範囲</td>
+            <td colSpan="3">{subText}</td>
           </tr>
         </thead>
         <tbody>
@@ -339,9 +370,18 @@ class Output extends Component {
 
     return (
       <div>
-      <EstimateLife range={range} />
-      <p />
-      {/* <ProcessDataView rangePeak={rangePeak} rangeRetire={rangeRetire} rangePeakAnd /> */}
+        <EstimateLife range={range} />
+        
+        <div class="hidden_box">
+          <input type="checkbox" id="labelxx"/>
+          <label for="labelxx">計算詳細</label>
+          <div class="hidden_show">
+            <ProcessDataView
+              rangePeak={rangePeak} rangeRetire={rangeRetire}
+              rangePeakAnd={rangePeakAnd} phase={phase}
+            />
+          </div>
+        </div>
       </div>
     )
   }
