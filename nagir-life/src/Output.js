@@ -207,69 +207,37 @@ const calcRange = (rangeA, rangeB) => {
 }
 
 const calcRangeUseFilterFromPhase = (range, rangeList, name) => {
-  if(rangeList.length === 0){
-    return range
-  }else{
-    const rangeFilterd = rangeList.filter(list => (list.type === name))
-    if(rangeFilterd.length === 0){
-      return {bottomRange: -1, topRange: -1}
-    }
-
-    let resultRange = range
-    for( const ranges of rangeFilterd ){
-      resultRange = calcRange(resultRange, ranges)
-    }
-
-    return resultRange
+  const rangeFilterd = rangeList.filter(list => (list.type === name))
+  if(rangeFilterd.length === 0){
+    return {bottomRange: -1, topRange: -1}
   }
 
+  let resultRange = range
+  for( const ranges of rangeFilterd ){
+    resultRange = calcRange(resultRange, ranges)
+  }
+
+  return resultRange
 }
+
 const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
   const resultRange = range
 
   if( (phase.nagir1 !== 0 && rangePeakAnd.nagir1.length === 0) ||
     (phase.nagir2 !== 0 && rangePeakAnd.nagir2.length === 0) ){
-    //入力がリスト範囲にない
+    //入力された成長段階がリストに存在しない場合
     resultRange.a = {bottomRange: -1, topRange: -1}
     resultRange.b = {bottomRange: -1, topRange: -1}
   }
 
-  resultRange.a = calcRangeUseFilterFromPhase(rangePeakAnd.nagir1,"早熟")
-  
   if(rangePeakAnd.nagir1.length !== 0){
-    const rangeNagir1A = rangePeakAnd.nagir1.filter(list => (list.type === "早熟"))
-    if(rangeNagir1A.length === 0){
-      resultRange.a = {bottomRange: -1, topRange: -1}
-    }
-    for( const range1 of rangeNagir1A ){
-      resultRange.a = calcRange(resultRange.a, range1)
-    }
-
-    const rangeNagir1B = rangePeakAnd.nagir1.filter(list => (list.type === "持続"))
-    if(rangeNagir1B.length === 0){
-      resultRange.b = {bottomRange: -1, topRange: -1}
-    }
-    for( const range1 of rangeNagir1B ){
-      resultRange.b = calcRange(resultRange.b, range1)
-    }    
+    resultRange.a = calcRangeUseFilterFromPhase(resultRange.a, rangePeakAnd.nagir1, "早熟")
+    resultRange.b = calcRangeUseFilterFromPhase(resultRange.b, rangePeakAnd.nagir1, "持続")
   }
 
   if(rangePeakAnd.nagir2.length !== 0){
-    const rangeNagir2A = rangePeakAnd.nagir2.filter(list => (list.type === "早熟"))
-    if(rangeNagir2A.length === 0){
-      resultRange.a = {bottomRange: -1, topRange: -1}
-    }
-    for( const range2 of rangeNagir2A ){
-      resultRange.a = calcRange(resultRange.a, range2)
-    }
-
-    const rangeNagir2B = rangePeakAnd.nagir2.filter(list => (list.type === "持続"))
-    if(rangeNagir2B.length === 0){
-      resultRange.b = {bottomRange: -1, topRange: -1}
-    }
-    for( const range2 of rangeNagir2B ){
-      resultRange.b = calcRange(resultRange.b, range2)
-    }
+    resultRange.a = calcRangeUseFilterFromPhase(resultRange.a, rangePeakAnd.nagir2, "早熟")
+    resultRange.b = calcRangeUseFilterFromPhase(resultRange.b, rangePeakAnd.nagir2, "持続")
   }
 
   //ナギール追加で早熟はピークにならない。持続は5段階にならない。{
@@ -315,7 +283,13 @@ const TableList = (props) => {
 }
 
 const ProcessDataView = (props) => {
-
+  return(
+    <div className="inline-block">
+      <table>
+        <thead></thead>
+      </table>
+    </div>
+  )
 }
 
 const EstimateLife = (props) => {
