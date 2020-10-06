@@ -87,14 +87,23 @@ const calcPeakEachType = (type,nagir) => {
 }
 
 const calcRetire = (nagir) => {
+  let bottomRange, topRange
+
   if(nagir===0){
-    return {bottomRange: 0, topRange: 0};
+    bottomRange = 0
+    topRange = 0
+
+  }else{
+    bottomRange = nagir*21+1
+    topRange = nagir*21+49
   }
 
-  const bottomRange = nagir*21+1
-  const topRange = nagir*21+49
-
-  return {bottomRange, topRange}
+  return ({
+    a: {bottomRange, topRange},
+    b: {bottomRange, topRange},
+    c: {bottomRange, topRange},
+    d: {bottomRange, topRange},
+  })
 }
 
 const calcPeakAfterPhase = (peak, peakAnd1, peakAnd2) => {
@@ -197,20 +206,6 @@ const calcRange = (rangeA, rangeB) => {
   return {bottomRange, topRange}
 }
 
-const TableList = (props) => {
-  const name = props.name
-  const type = props.type !== 0 ?  props.type : {bottomRange: 0, topRange: 0}
-
-  return (
-    <tr>
-      <td>{name}</td>
-      <td className="life">{type.bottomRange}</td>
-      <td>-</td>
-      <td className="life">{type.topRange}</td>
-    </tr>
-  )
-}
-
 const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
   const resultRange = range
 
@@ -286,6 +281,19 @@ const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
   return resultRange
 }
 
+const TableList = (props) => {
+  const name = props.name
+  const type = props.type !== 0 ?  props.type : {bottomRange: 0, topRange: 0}
+
+  return (
+    <tr>
+      <td>{name}</td>
+      <td className="life">{type.bottomRange}</td>
+      <td>-</td>
+      <td className="life">{type.topRange}</td>
+    </tr>
+  )
+}
 const EstimateLife = (props) => {
   const type = {
     a: {bottomRange: props.range.a.bottomRange, topRange: props.range.a.topRange},
@@ -323,16 +331,21 @@ class Output extends Component {
 
     let range = {
       //a.早熟 b.持続 c.普通 d.晩成
-      a: calcRange(rangePeak.a, rangeRetire),
-      b: calcRange(rangePeak.b, rangeRetire),
-      c: calcRange(rangePeak.c, rangeRetire),
-      d: calcRange(rangePeak.d, rangeRetire),
+      a: calcRange(rangePeak.a, rangeRetire.a),
+      b: calcRange(rangePeak.b, rangeRetire.b),
+      c: calcRange(rangePeak.c, rangeRetire.c),
+      d: calcRange(rangePeak.d, rangeRetire.d),
     }
 
     range = calcYoungTypeAndJudge(range,rangePeakAnd,phase)
 
-    return (      
-      <EstimateLife range={range}/>
+    return (
+      <div>
+      <EstimateLife range={range} />
+      <p />
+      <EstimateLife className="inline-block" range={rangePeak} />
+      <EstimateLife className="inline-block" range={rangeRetire} />
+      </div>
     )
   }
 }
