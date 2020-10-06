@@ -72,7 +72,8 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <h1>ナギール数 to 寿命タイプ</h1>
+        <p />
+        <h1>MF2 -命でわかるナギール数-</h1>
 
         <div className="inline-block">
           ナギール数
@@ -84,7 +85,7 @@ class App extends Component {
           <InputForm name="retire" change={this.setStateValue} />
         </div>
 
-        <p />
+        <br />
 
         <div className="inline-block">
           ピーク告知後
