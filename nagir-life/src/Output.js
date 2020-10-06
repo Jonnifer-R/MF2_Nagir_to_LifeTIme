@@ -116,7 +116,8 @@ const calcPeakAfterPhase = (peak, peakAnd1, peakAnd2) => {
       {type: "早熟", bottomRange: 368, topRange: 480, phase: "postPeak"},
       {type: "早熟", bottomRange: 481, topRange: 700, phase: "peak"},
 
-      {type: "持続", bottomRange: 241, topRange: 262, phase: "postPeak"},
+      {type: "持続", bottomRange: 211, topRange: 233, phase: "phase5"},
+      {type: "持続", bottomRange: 234, topRange: 262, phase: "postPeak"},
       {type: "持続", bottomRange: 263, topRange: 280, phase: "peak"},
       {type: "持続", bottomRange: 281, topRange: 315, phase: "postPeak"},
       {type: "持続", bottomRange: 316, topRange: 350, phase: "peak"},
@@ -142,13 +143,13 @@ const calcPeakAfterPhase = (peak, peakAnd1, peakAnd2) => {
 
   let result = {
     nagir1: nagir1.filter(range => (
-      range.bottomRange <= peak.a.topRange &&
-      range.topRange >= peak.a.bottomRange &&
+      range.bottomRange <= peak.b.topRange &&
+      range.topRange >= peak.b.bottomRange &&
       range.phase === peakAnd1
     )),
     nagir2: nagir2.filter(range => (
-      range.bottomRange <= peak.a.topRange &&
-      range.topRange >= peak.a.bottomRange &&
+      range.bottomRange <= peak.b.topRange &&
+      range.topRange >= peak.b.bottomRange &&
       range.phase === peakAnd2
     )),
   }
@@ -242,7 +243,10 @@ const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
 
   //ナギール追加で早熟はピークにならない。持続は5段階にならない。{
   if(phase.nagir1 === "phase5"){
-    resultRange.b = {bottomRange: -1, topRange: -1}
+    if(resultRange.b.topRange >= 240){
+      //寿命211～240 早熟がピーク告知なしになる区間は除く
+      resultRange.b = {bottomRange: -1, topRange: -1}
+    }
 
     if(range.a.bottomRange > 368){
       //360週から早熟も5段階にならない
@@ -372,10 +376,10 @@ class Output extends Component {
       <div>
         <EstimateLife range={range} />
         
-        <div class="hidden_box">
+        <div className="hidden_box">
           <input type="checkbox" id="labelxx"/>
-          <label for="labelxx">計算詳細</label>
-          <div class="hidden_show">
+          <label htmlFor="labelxx">計算詳細</label>
+          <div className="hidden_show">
             <ProcessDataView
               rangePeak={rangePeak} rangeRetire={rangeRetire}
               rangePeakAnd={rangePeakAnd} phase={phase}
