@@ -206,6 +206,24 @@ const calcRange = (rangeA, rangeB) => {
   return {bottomRange, topRange}
 }
 
+const calcRangeUseFilterFromPhase = (range, rangeList, name) => {
+  if(rangeList.length === 0){
+    return range
+  }else{
+    const rangeFilterd = rangeList.filter(list => (list.type === name))
+    if(rangeFilterd.length === 0){
+      return {bottomRange: -1, topRange: -1}
+    }
+
+    let resultRange = range
+    for( const ranges of rangeFilterd ){
+      resultRange = calcRange(resultRange, ranges)
+    }
+
+    return resultRange
+  }
+
+}
 const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
   const resultRange = range
 
@@ -215,6 +233,8 @@ const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
     resultRange.a = {bottomRange: -1, topRange: -1}
     resultRange.b = {bottomRange: -1, topRange: -1}
   }
+
+  resultRange.a = calcRangeUseFilterFromPhase(rangePeakAnd.nagir1,"早熟")
   
   if(rangePeakAnd.nagir1.length !== 0){
     const rangeNagir1A = rangePeakAnd.nagir1.filter(list => (list.type === "早熟"))
@@ -277,7 +297,6 @@ const calcYoungTypeAndJudge = (range,rangePeakAnd,phase) => {
     resultRange.a = {bottomRange: -1, topRange: -1}
   }
     
-
   return resultRange
 }
 
@@ -294,6 +313,11 @@ const TableList = (props) => {
     </tr>
   )
 }
+
+const ProcessDataView = (props) => {
+
+}
+
 const EstimateLife = (props) => {
   const type = {
     a: {bottomRange: props.range.a.bottomRange, topRange: props.range.a.topRange},
@@ -343,8 +367,7 @@ class Output extends Component {
       <div>
       <EstimateLife range={range} />
       <p />
-      <EstimateLife className="inline-block" range={rangePeak} />
-      <EstimateLife className="inline-block" range={rangeRetire} />
+      {/* <ProcessDataView rangePeak={rangePeak} rangeRetire={rangeRetire} rangePeakAnd /> */}
       </div>
     )
   }
