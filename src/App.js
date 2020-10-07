@@ -49,6 +49,7 @@ class App extends Component {
         default:
           console.log("Error: Bad x peak")
       }
+      
       return ;
     }
 
