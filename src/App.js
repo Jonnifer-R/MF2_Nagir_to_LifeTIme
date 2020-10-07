@@ -49,7 +49,7 @@ class App extends Component {
         default:
           console.log("Error: Bad x peak")
       }
-      
+
       return ;
     }
 
@@ -63,6 +63,7 @@ class App extends Component {
       this.setState({
         [name]: num
       })
+      
     }else{
       console.log("Error: Bad label name")
     }
