@@ -314,14 +314,27 @@ const TableList = (props) => {
   const name = props.name
   const type = props.type !== 0 ?  props.type : {bottomRange: 0, topRange: 0}
 
-  return (
-    <tr>
-      <td className="head">{name}</td>
-      <td className="life">{type.bottomRange}</td>
-      <td>-</td>
-      <td className="life">{type.topRange}</td>
-    </tr>
-  )
+  if( type.bottomRange===-1 && type.topRange===-1){
+    return (
+      <tr>
+        <td className="head"><s>{name}</s></td>
+        <td className="life">x</td>
+        <td>-</td>
+        <td className="life">x</td>
+      </tr>
+    )
+    
+  }else{
+    return (
+      <tr>
+        <td className="head">{name}</td>
+        <td className="life">{type.bottomRange}</td>
+        <td>-</td>
+        <td className="life">{type.topRange}</td>
+      </tr>
+    )
+  }
+    
 }
 
 const EstimateLife = (props) => {

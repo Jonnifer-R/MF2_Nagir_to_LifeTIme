@@ -73,7 +73,7 @@ class App extends Component {
     return (
       <div className="container">
         <p />
-        <h1>MF2 -命でわかるナギール数-</h1>
+        <h1>MF2 -命でわかるナギール数- β版</h1>
 
         <div className="inline-block">
           ナギール数
